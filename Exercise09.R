@@ -1,17 +1,7 @@
 ### Biocomputing -- Exercise 09
 ### Ashton Bieri | github @ashtonbieri
 
-### Problem: """akes a directory name as an argument called dir plus any other arguments requried to
-#accomplish the specified task.
-#The function should read data from each file in the specified directory and calculate the coefficient of variation
-#(standard deviation divided by the mean) for a user specified column. These values should be returned as a
-#vector.
-#To calculate a reliable coefficient of variation we would like to have 50 observations, but we also don't want
-#to force the user to use our high standard for the data. Make your function, by default, report an error if any
-#file has less than 50 observations, but allow the user to override this behavior and only receive a warningif 50
-#observations are not present in a file.
-#For an extra credit point, add arguments and associated code to your function to situations where a file
-#doesn't have the correct number of columns or the provided data includes NA's.
+### Function: takes a directory to search all files within; calculating standard of variance for a specific column
 
 Exercise09 <- function (dir=".",column=1,separator=",") {
    #Usage: Exercise09("./data",column=3,sep="")
@@ -19,20 +9,23 @@ Exercise09 <- function (dir=".",column=1,separator=",") {
    
    # find files
    files <- list.files("./test",full.names=TRUE)
+   #set up output vector
    output <- numeric(length = length(files))
    # read in each file
    for (i in 1:length(files)) {
       data <- read.table(file=files[i],sep=separator)
+      #check to see if there are 50 observations
       if(length(data[,column])<50) {
+         #check to see if user wants to continue with <50
          response<-readline("Your data file does not have 50 observations; do you wish to continue? (Y/N)")
          if(response=="Y"){
             output[i] <- sd(data[,column])/length(data[,column])
          }
-      }else{
+      }else{ #there ARE >=50; continue
       output[i] <- sd(data[,column])/length(data[,column])
       }
    }
-   # do calculation
+   # return the output
    return(output)
 }
 
